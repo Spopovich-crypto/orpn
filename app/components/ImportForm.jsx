@@ -115,14 +115,16 @@ export default function ImportForm() {
         end_time: e.end_time.toISOString()
       }))
     };
+    console.log(payload);
+    
   
-    try {
-      const result = await invoke('import_sensor_data', { payload });
-      setSnackbar({ open: true, message: result, severity: 'success' });
-    } catch (err) {
-      console.error(err);
-      setSnackbar({ open: true, message: 'Python処理に失敗しました', severity: 'error' });
-    }
+    // try {
+    //   const result = await invoke('import_sensor_data', { payload });
+    //   setSnackbar({ open: true, message: result, severity: 'success' });
+    // } catch (err) {
+    //   console.error(err);
+    //   setSnackbar({ open: true, message: 'Python処理に失敗しました', severity: 'error' });
+    // }
   };
 
   return (
