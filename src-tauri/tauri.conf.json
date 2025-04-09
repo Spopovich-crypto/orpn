@@ -33,5 +33,11 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+  },
+  "plugins": {
+    "plugin-python": {
+      "interpreter": ".venv/Scripts/python.exe",
+      "entry": "src-python/main.py"
+    }
   }
 }

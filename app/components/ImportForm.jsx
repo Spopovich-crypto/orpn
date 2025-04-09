@@ -12,6 +12,7 @@ import { AddCircle, RemoveCircle, ExpandMore, Folder } from '@mui/icons-material
 import { open as openDialog } from '@tauri-apps/plugin-dialog';
 import { Autocomplete } from '@mui/material';
 import dayjs from 'dayjs';
+import { invoke } from "@tauri-apps/api/core";
 
 export default function ImportForm() {
   const [formVisible, setFormVisible] = useState(false);
@@ -80,7 +81,7 @@ export default function ImportForm() {
     setEvents(newEvents);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (!targetFolder || !plantCode || !machineCode || !labelTitle) {
       setSnackbar({ open: true, message: '基本設定の必須項目をすべて入力してください。', severity: 'warning' });
       setActiveStep(0);
@@ -99,7 +100,7 @@ export default function ImportForm() {
 
     const payload = {
       target_folder: targetFolder,
-      name_patterns: namePatterns.filter(Boolean),
+      name_patterns: namePatterns,
       encoding,
       db_path: dbPath,
       label: {
@@ -114,8 +115,14 @@ export default function ImportForm() {
         end_time: e.end_time.toISOString()
       }))
     };
-    console.log('送信データ:', payload);
-    // tauri.invoke('import_sensor_data', payload);
+  
+    try {
+      const result = await invoke('import_sensor_data', { payload });
+      setSnackbar({ open: true, message: result, severity: 'success' });
+    } catch (err) {
+      console.error(err);
+      setSnackbar({ open: true, message: 'Python処理に失敗しました', severity: 'error' });
+    }
   };
 
   return (
